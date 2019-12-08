@@ -1,17 +1,15 @@
-import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,6 +34,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const tryRegistration = async () => {
+    await axios.post("http://localhost:8080/api/users", inputs)
+  }
+  const [inputs, setInputs] = useState({
+    username: '',
+    nickname: '',
+    email: '',
+    password: '',
+    roles: ['USER']
+  })
+
+  const onChange = (e) => {
+    const { value, name } = e.target
+    setInputs({
+      ...inputs,
+      [name]: value
+    })
+    console.log(inputs)
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -54,10 +71,33 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
+                id="username"
+                label="UserName"
+                name="username"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="nickname"
+                label="NickName"
+                name="nickname"
+                onChange={onChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={onChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -69,13 +109,13 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                onChange={onChange}
                 autoComplete="current-password"
               />
             </Grid>
           </Grid>
           <Button
-            href = "/signin"
-            type="submit"
+            onClick={tryRegistration}
             fullWidth
             variant="contained"
             color="primary"
