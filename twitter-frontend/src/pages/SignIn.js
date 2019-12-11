@@ -8,8 +8,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import axios from 'axios';
 import React, { useState } from 'react';
+import { userLogin } from '../signIn/signin';
+import {useDispatch} from 'react-redux'
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +33,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn({onSetJwt, history}) {
+  const dispatch = useDispatch()
   const classes = useStyles();
   const [inputs, setInputs] = useState({
     email: '',
@@ -45,15 +47,11 @@ export default function SignIn() {
       ...inputs,
       [name]: value
     })
-    console.log(inputs)
   }
 
-  const tryLogin = async () => {
-    console.log(inputs)
-    await axios.post("http://localhost:8080/api/users/login", inputs)
-      .then(function (response) {
-        console.log(response)
-      })
+  const handleSubmit = event => {
+    event.preventDefault()
+    userLogin(inputs, onSetJwt, dispatch)
   }
 
   return (
@@ -92,7 +90,8 @@ export default function SignIn() {
             onChange={onChange}
           />
           <Button
-            onClick={tryLogin}
+            onClick={handleSubmit}
+            type="button"
             fullWidth
             variant="contained"
             color="primary"
