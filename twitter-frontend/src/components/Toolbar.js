@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   toolbar: {
-    marginTop: '50px'
+    marginTop: '50px',
   },
   drawerPaper: {
     width: drawerWidth,
@@ -37,6 +38,11 @@ function Toolbar() {
     margin: '0 auto',
     width: '70%'
   }
+
+  const logoutClick = () => {
+    localStorage.removeItem('token')
+  }
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
@@ -47,12 +53,25 @@ function Toolbar() {
             <ListItemText primary='홈' />
           </ListItem>
         </Link>
-        <Link to="/main/profile" style={{ textDecoration: 'none', color: 'black' }}>
+        <Link to="/main/profile" style={{ textDecoration: 'none', color: 'black'}}>
           <ListItem button key='프로필'>
             <ListItemIcon><UserIcon /></ListItemIcon>
             <ListItemText primary='프로필' />
           </ListItem>
         </Link>
+        <div style={{ textAlign: 'center'}}>
+          <Link to="/signin" style={{ textDecoration: 'none', color: 'black' }}>
+            <Button
+              type='button'
+              variant="contained"
+              color='primary'
+              className={classes.button}
+              onClick={logoutClick}
+            >
+              LOGOUT
+            </Button>
+          </Link>
+        </div>
       </List>
     </div>
   );
